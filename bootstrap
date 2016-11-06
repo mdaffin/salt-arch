@@ -1,0 +1,85 @@
+#!/bin/bash
+# WARNING: this script will destroy data on the selected disk.
+# This script can be run by executing the following:
+#   curl -sL git.io/vXzvY | bash
+# This script requires a private git repo setup with salt state top file and pillar info.
+
+set -uo pipefail
+trap 's=$?; echo "$0: Error on line "$LINENO": $BASH_COMMAND"; exit $s' ERR
+
+fail() {
+  echo >&2 "$@"
+  exit 1
+}
+
+### Get infomation from user ###
+hostname=$(dialog --stdout --inputbox "Enter hostname" 0 0) || exit 1
+clear
+: ${hostname:?"hostname cannot be empty"}
+
+github_user=$(dialog --stdout --inputbox "Github username" 0 0) || exit 1
+github_password=$(dialog --stdout --passwordbox "Github password" 0 0) || exit 1
+github_repo=$(dialog --stdout --inputbox "Github private repo" 0 0 "salt-private") || exit 1
+clear
+
+ssh-keygen -t rsa -N "" -f github
+curl -XPOST -u "${github_user}:${github_password}" "https://api.github.com/repos/${github_user}/${github_repo}/keys" -d '{"title":"testing","key":"'"$(cat github.pub)"'","read_only":"true"}'
+
+devicelist=$(lsblk -dplnx size -o name,size | grep -Ev "boot|rpmb|loop" | tac)
+device=$(dialog --stdout --menu "Select installtion disk" 0 0 0 ${devicelist}) || exit 1
+clear
+
+### Set up logging ###
+exec 1> >(tee "stdout.log")
+exec 2> >(tee "stderr.log")
+
+### Setup the disk and partitions ###
+parted --script "${device}" -- mklabel gpt \
+  mkpart ESP fat32 1Mib 129MiB \
+  set 1 boot on \
+  mkpart primary linux-swap 129MiB 2177MiB \
+  mkpart primary btrfs 2177MiB 100%
+
+# Simple globbing was not enough as on one device I needed to match /dev/mmcblk0p1 
+# but not /dev/mmcblk0boot1 while being able to match /dev/sda1 on other devices.
+part_boot="$(ls ${device}* | grep -E "^${device}p?1$")"
+part_swap="$(ls ${device}* | grep -E "^${device}p?2$")"
+part_root="$(ls ${device}* | grep -E "^${device}p?3$")"
+
+mkfs.vfat -F32 "${part_boot}"
+mkswap "${part_swap}"
+mkfs.btrfs -f "${part_root}"
+
+swapon "${part_swap}"
+mount "${part_root}" /mnt
+mkdir /mnt/boot
+mount "${part_boot}" /mnt/boot
+
+### Install and configure the basic system ###
+pacstrap /mnt base salt python2-pygit2 git wireless_tools
+
+mkdir -p /mnt/etc/salt/ssh
+mv github github.pub /mnt/etc/salt/ssh
+genfstab -t PARTUUID /mnt >> /mnt/etc/fstab
+echo "${hostname}" > /mnt/etc/hostname
+network_settings=$(find /etc/netctl -maxdepth 1 -type f)
+[[ -z "${network_settings}" ]] || cp ${network_settings} /mnt/etc/netctl/
+cat >/mnt/etc/salt/minion <<EOF
+file_client: local
+fileserver_backend:
+  - git
+gitfs_remotes:
+  - https://github.com/mdaffin/salt.git
+  - git@github.com:${github_user}/${github_repo}.git:
+    - root: state
+    - pubkey: /etc/salt/ssh/github.pub
+    - privkey: /etc/salt/ssh/github
+ext_pillar:
+  - git:
+    - master git@github.com:${github_user}/${github_repo}.git:
+      - root: pillar
+      - pubkey: /etc/salt/ssh/github.pub
+      - privkey: /etc/salt/ssh/github
+EOF
+
+arch-chroot /mnt salt-call --local state.apply pillar='{"bootstrap": True}'

@@ -1,0 +1,28 @@
+base-devel:
+  pkg.installed:
+    - pkgs:
+      - autoconf
+      - automake
+      - binutils
+      - bison
+      - fakeroot
+      - file
+      - findutils
+      - flex
+      - gawk
+      - gcc
+      - gettext
+      - grep
+      - groff
+      - gzip
+      - libtool
+      - m4
+      - make
+      - pacman
+      - patch
+      - pkg-config
+      - sed
+      - sudo
+      - texinfo
+      - util-linux
+      - which

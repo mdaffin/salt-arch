@@ -1,0 +1,2 @@
+termite:
+  pkg.installed
