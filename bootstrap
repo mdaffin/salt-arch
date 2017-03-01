@@ -69,7 +69,7 @@ file_client: local
 fileserver_backend:
   - git
 gitfs_remotes:
-  - https://github.com/mdaffin/salt.git
+  - https://github.com/mdaffin/salt-arch.git
   - git@github.com:${github_user}/${github_repo}.git:
     - root: state
     - pubkey: /etc/salt/ssh/github.pub
