@@ -21,6 +21,13 @@
     - group: {{ user.name }}
     - require:
       - {{ user.name }}
+      {%- if file.cmd is defined %}
+   cmd.run:
+    - name: '{{ file.cmd }}'
+    - runas: {{ user.name }}
+    - onchanges:
+      - file: "{{ user.name }}-{{ file.name }}"
+      {% endif %}
     {%- endfor %}
     {%- endif %}
 {% endfor %}
