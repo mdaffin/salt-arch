@@ -6,15 +6,5 @@
     - {{ key }}: {{ value | yaml }}
     {%- endif %}
     {%- endfor %}
-    
-    {%- for file in user.files %}
-"{{ user.name }}-{{ file.name }}":
-  file.managed:
-    - name: {{ salt['user.info'](user.name).home }}/{{ file.name }}
-    - source: {{ file.source }}
-    - user: {{ user.name }}
-    - group: {{ user.name }}
-    - require:
-      - {{ user.name }}
-    {%- endfor %}
+ 
 {% endfor %}
