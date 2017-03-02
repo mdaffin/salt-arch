@@ -15,6 +15,8 @@
     - source: {{ file.source }}
     {%- if file.source_hash is defined %}
     - source_hash: {{ file.source_hash }}
+    {% else %}
+    - skip_verify: True
     {%- endif %}
     - makedirs: True
     - user: {{ user.name }}
