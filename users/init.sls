@@ -13,6 +13,9 @@
   file.managed:
     - name: {{ salt['user.info'](user.name).home }}/{{ file.name }}
     - source: {{ file.source }}
+    {%- if file.source_hash is defined %}
+    - source_hash: {{ file.source_hash }}
+    {%- endif %}
     - user: {{ user.name }}
     - group: {{ user.name }}
     - require:
