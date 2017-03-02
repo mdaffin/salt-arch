@@ -24,7 +24,7 @@
     - require:
       - {{ user.name }}
       {%- if file.cmd is defined %}
-   cmd.run:
+  cmd.run:
     - name: '{{ file.cmd }}'
     - runas: {{ user.name }}
     - onchanges:
