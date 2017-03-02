@@ -16,6 +16,7 @@
     {%- if file.source_hash is defined %}
     - source_hash: {{ file.source_hash }}
     {%- endif %}
+    - makedirs: True
     - user: {{ user.name }}
     - group: {{ user.name }}
     - require:
