@@ -6,9 +6,6 @@
     - {{ key }}: {{ value | yaml }}
     {%- endif %}
     {%- endfor %}
-    
-    {%- if user.files is defined %}
-    {%- for file in user.files %}
 {% endfor %}
 
 include:
