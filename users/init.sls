@@ -9,6 +9,7 @@
     
     {%- if user.files is defined %}
     {%- for file in user.files %}
+{{ salt['user.info'](user.name) }}
 "{{ user.name }}-{{ file.name }}":
   file.managed:
     - name: {{ salt['user.info'](user.name).home }}/{{ file.name }}
