@@ -7,6 +7,3 @@
     {%- endif %}
     {%- endfor %}
 {% endfor %}
-
-include:
-  - users.config
