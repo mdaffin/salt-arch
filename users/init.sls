@@ -19,6 +19,7 @@
     - skip_verify: True
     {%- endif %}
     - template: jinja
+    - context: {{ user }}
     - makedirs: True
     - user: {{ user.name }}
     - group: {{ user.name }}
