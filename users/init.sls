@@ -12,7 +12,7 @@
 {{ salt['user.info'](user.name) }}
 "{{ user.name }}-{{ file.name }}":
   file.managed:
-    - name: {{ salt['user.info'](user.name).home }}/{{ file.name }}
+    - name: {#{ salt['user.info'](user.name).home }#}/{{ file.name }}
     - source: {{ file.source }}
     {%- if file.source_hash is defined %}
     - source_hash: {{ file.source_hash }}
