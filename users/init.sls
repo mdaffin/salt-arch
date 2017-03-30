@@ -2,7 +2,7 @@
 {{ user.name }}:
   user.present:
     {%- for key, value in user.items() %}
-    {%- if key != "files" or key != "extra" %}
+    {%- if key != "files" || key != "extra" %}
     - {{ key }}: {{ value | yaml }}
     {%- endif %}
     {%- endfor %}
