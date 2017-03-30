@@ -6,4 +6,6 @@ sudo:
     - user: root
     - group: root
     - mode: 440
-    - contents: '%wheel ALL=(ALL) ALL'
+    - contents: |
+        %wheel ALL=(ALL) ALL
+        Defaults passwd_timeout=0
