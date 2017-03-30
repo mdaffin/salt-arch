@@ -1,7 +1,7 @@
 {%- for user in pillar.get('users', {}) %}
     {% set user_info = salt['user.info'](user.name) %}
     {%- if user_info.home is defined %}
-    {%- set homedir = user_info %}
+    {%- set homedir = user_info.home %}
     {%- else %}
     {%- set homedir = "/home/" + user.name %}
     {%- endif %}
