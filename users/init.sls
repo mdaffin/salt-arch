@@ -9,4 +9,4 @@
 {% endfor %}
 
 include:
-  - users.configs
+  - users.config
