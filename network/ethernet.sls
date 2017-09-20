@@ -6,7 +6,7 @@ ethernet.packages:
 {%- set ethernet_interfaces =  salt.network.interfaces() %}
 {%- for interface, data in ethernet_interfaces.iteritems() %}
 {%- if interface.startswith('enp') or interface.startswith('eth')  %}
-/etc/netctl/{{interface}}-dhcp
+/etc/netctl/{{interface}}-dhcp:
   file.managed:
       - content: |
           Description='A basic dhcp ethernet connection'
