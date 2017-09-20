@@ -2,7 +2,6 @@ xorg:
   pkg.installed:
     - pkgs:
       - xorg-server
-      - xorg-server-utils
       - xf86-input-synaptics
       - xf86-input-libinput
 
