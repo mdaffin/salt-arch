@@ -8,7 +8,7 @@ ethernet.packages:
 {%- if interface.startswith('enp') or interface.startswith('eth')  %}
 /etc/netctl/{{interface}}-dhcp:
   file.managed:
-      - content: |
+      - contents: |
           Description='A basic dhcp ethernet connection'
           Interface={{interface}}
           Connection=ethernet
