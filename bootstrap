@@ -64,6 +64,7 @@ genfstab -t PARTUUID /mnt >> /mnt/etc/fstab
 echo "${hostname}" > /mnt/etc/hostname
 network_settings=$(find /etc/netctl -maxdepth 1 -type f)
 [[ -z "${network_settings}" ]] || cp ${network_settings} /mnt/etc/netctl/
+echo "${hostname}" >/mnt/etc/salt/minion_id
 cat >/mnt/etc/salt/minion <<EOF
 file_client: local
 fileserver_backend:
