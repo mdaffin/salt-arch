@@ -6,5 +6,5 @@ avahi-packages:
 
 /etc/nsswitch.conf:
   file.replace:
-    - pattern: '(?<!mdns_minimal )resolve'
-    - repl: 'mdns_minimal resolve'
+    - pattern: '(?<!mdns_minimal [NOTFOUND=return] )resolve'
+    - repl: 'mdns_minimal [NOTFOUND=return] resolve'
