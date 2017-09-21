@@ -2,6 +2,9 @@ xorg:
   pkg.installed:
     - pkgs:
       - xorg-server
+      - xorg-xsetroot
+      - xorg-xkill
+      - xorg-xbacklight
       - xf86-input-synaptics
       - xf86-input-libinput
 
