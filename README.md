@@ -1,8 +1,12 @@
 # SaltStack desktop scripts
 
+---
+
 **Not actively maintained, leaving up for reference**
 
 See [this](https://disconnected.systems/blog/archlinux-meta-packages/) for my current approch.
+
+---
 
 This repo contains the saltstack states that I use to provision my computers. It is able to fully bootstrap and manage an archlinux install with nothing but a arch live disk, an internet connection and minimal interaction.
 
