@@ -1,6 +1,6 @@
 # SaltStack desktop scripts
 
-**Not acticly maintained, leaving up for reference**
+**Not actively maintained, leaving up for reference**
 
 See [this](https://disconnected.systems/blog/archlinux-meta-packages/) for my current approch.
 
